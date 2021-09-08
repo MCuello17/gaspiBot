@@ -62,7 +62,7 @@ client.on("messageCreate", async msg => {
     const member = guild.members.cache.get(msg.author.id);
     const channel = member.voice.channel;
     
-    if (channel === null) return;
+    if (channel === null) return msg.reply("No estás en ningún canal de audio IMBECIL");
 
     const resourceName = command.replace('-g ', '');
     let resource;
