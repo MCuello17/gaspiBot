@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, MessageEmbed } = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
 const token = process.env.BOT_TOKEN;
@@ -29,6 +29,26 @@ client.on("ready", () => {
 
 });
 
+client.on('guildCreate', guild => {
+    const defaultChannel = guild.systemChannelId;
+    const firstChannel = guild.channels.cache.filter(channel => {
+        console.log(channel.type, channel.type == "GUILD_TEXT");
+        return channel.type == "GUILD_TEXT";
+    }).values().next().value;
+    
+    const channel = guild.channels.cache.get(defaultChannel || firstChannel.id);
+    const message = new MessageEmbed()
+        .setColor("#ffffff")
+        .setTitle("BUENAAAAAASS")
+        .setDescription("Cómo les va che todo bien? Yo soy el GaspiBot, un bot de mierda que solo sirve para romper los huevos. Acá está la lista de comandos:")
+        .addFields(
+            {name: "-g help", value: "Lista de comandos copados"},
+            {name: "-g random", value: "Sonido random"},
+            {name: "-g [sonido]", value: "[buenas] [boliviano] [fiumba]"}
+        )
+    channel.send({embeds: [message]});
+});
+
 const getRandomResource = () => {
     const keys = Object.keys(audioResources);
     const prop = keys[Math.floor(Math.random() * keys.length)];
@@ -53,6 +73,18 @@ const playAudio = (channel, audioResource) => {
     });
 }
 
+const helpMessage = () => {
+    return new MessageEmbed()
+        .setColor("#ffffff")
+        .setTitle("Ah pero que pelotudo que sos")
+        .setDescription("Acá tenes los comandos de mierda:")
+        .addFields(
+            {name: "-g help", value: "Esta lista de mierda"},
+            {name: "-g random", value: "Sonido random"},
+            {name: "-g [sonido]", value: "[buenas] [boliviano] [fiumba]"}
+        )
+}
+
 client.on("messageCreate", async msg => {
     if (msg.author.id === client.user.id) return;
     const command = msg.content;
@@ -61,10 +93,14 @@ client.on("messageCreate", async msg => {
     const guild = client.guilds.cache.get(msg.guildId);
     const member = guild.members.cache.get(msg.author.id);
     const channel = member.voice.channel;
+    const resourceName = command.replace('-g ', '');
+
+    if (resourceName == 'help') {
+        return msg.reply({embeds: [helpMessage()]});
+    }
     
     if (channel === null) return msg.reply("No estás en ningún canal de audio IMBECIL");
 
-    const resourceName = command.replace('-g ', '');
     let resource;
 
     switch (resourceName) {
