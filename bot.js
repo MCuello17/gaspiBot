@@ -26,8 +26,16 @@ client.on("ready", () => {
     const resource = createAudioResource(getRandomResource());
 
     // playAudio(randomChannel, resource);
+    console.log(getAudioList());
 
 });
+
+const getAudioList = () => {
+    const audios = Object.keys(audioResources).map(audio => {
+        return `[${audio}]`;
+    });
+    return audios.join(' ');
+}
 
 client.on('guildCreate', guild => {
     const defaultChannel = guild.systemChannelId;
@@ -44,7 +52,7 @@ client.on('guildCreate', guild => {
         .addFields(
             {name: "-g help", value: "Lista de comandos copados"},
             {name: "-g random", value: "Sonido random"},
-            {name: "-g [sonido]", value: "[buenas] [boliviano] [fiumba]"}
+            {name: "-g [sonido]", value: getAudioList()}
         )
     channel.send({embeds: [message]});
 });
@@ -81,7 +89,7 @@ const helpMessage = () => {
         .addFields(
             {name: "-g help", value: "Esta lista de mierda"},
             {name: "-g random", value: "Sonido random"},
-            {name: "-g [sonido]", value: "[buenas] [boliviano] [fiumba]"}
+            {name: "-g [sonido]", value: getAudioList()}
         )
 }
 
