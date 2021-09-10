@@ -3,6 +3,7 @@ const audioResources = {
     buenas: "./audio/buenas.mp3",
     fiumba: "./audio/fiumba.mp3",
     venezolano: "./audio/venezolano.mp3",
+    motivacional: "./audio/motivacional.mp3",
     // escuchando: "./audio/escuchando.mp3",
 }
 
