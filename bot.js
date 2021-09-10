@@ -26,7 +26,6 @@ client.on("ready", () => {
     const resource = createAudioResource(getRandomResource());
 
     // playAudio(randomChannel, resource);
-    console.log(getAudioList());
 
 });
 
